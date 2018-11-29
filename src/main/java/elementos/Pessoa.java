@@ -1,7 +1,8 @@
 package elementos;
 
-public class Pessoa
-{
+import java.util.ArrayList;
+
+public class Pessoa extends ArrayList<Pessoa> {
     private int origem;
     private int destino;
 

@@ -1,5 +1,6 @@
 package util;
 
+import elementos.Andar;
 import elementos.Pessoa;
 
 import java.io.BufferedReader;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 public class LerArquivo
 {
     private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas;
-    private Pessoa pessoa;
+    private Andar andar;
 
     public LerArquivo(String nomeArq)
     {
@@ -46,24 +47,14 @@ public class LerArquivo
                     vetorPessoas.put(instante, listaPessoas);
                 }
 
-
-
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
 
-            for (int i = 0; i < vetorPessoas.size(); i++)
-            {
-                ArrayList teste;
-
-                teste = vetorPessoas.get(i);
-                System.out.println("\n Chave: " + i);
-
-                for (int j = 1; j < teste.size(); j++)
-                {
-                    System.out.println(teste.get(j));
-                }
-            }
-
+            andar = new Andar(vetorPessoas);
+            andar.filaPorAndar(0);
+            andar.filaPorAndar(1);
+            andar.filaPorAndar(2);
+            andar.filaPorAndar(3);
             arq.close();
         }
 
