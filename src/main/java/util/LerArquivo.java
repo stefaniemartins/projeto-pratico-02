@@ -18,7 +18,8 @@ public class LerArquivo
     {
         vetorPessoas = new HashMap();
 
-        try {
+        try
+        {
             FileReader arq = new FileReader(nomeArq);
             BufferedReader lerArq = new BufferedReader(arq);
 
@@ -52,9 +53,9 @@ public class LerArquivo
 
             andar = new Andar(vetorPessoas);
             andar.filaPorAndar(0);
-            andar.filaPorAndar(1);
-            andar.filaPorAndar(2);
-            andar.filaPorAndar(3);
+//            andar.filaPorAndar(1);
+//            andar.filaPorAndar(2);
+//            andar.filaPorAndar(3);
             arq.close();
         }
 

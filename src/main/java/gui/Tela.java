@@ -2,6 +2,7 @@ package gui;
 
 import elementos.Carro;
 import elementos.Elemento;
+import elementos.Elevador;
 import elementos.Semaforo;
 import exemplo.ExemploDeThread;
 import exemplo.OutroCarro;
@@ -22,8 +23,8 @@ import java.util.ArrayList;
  *
  * @author Emerson Ribeiro de Mello - 2018
  */
-public class Tela extends JPanel implements ActionListener {
-
+public class Tela extends JPanel implements ActionListener
+{
     private LerArquivo lerArquivo;
     // usado para redesenhar a tela periodicamente
     private Timer timer;
@@ -79,16 +80,12 @@ public class Tela extends JPanel implements ActionListener {
         elementos.clear();
 
         // Adicionando um Carro e um Semáforo
-        elementos.add(new Carro(this,"carrov.png",100,400));
-        elementos.add(new Semaforo(this, "traffic.png", 10, 50));
+        elementos.add(new Elevador(this,"open.png",105,595));
+        elementos.add(new Elevador(this,"open.png",265,595));
+        elementos.add(new Elevador(this,"open.png",425,595));
 
         // Esse mesmo objeto é adicionado no ArrayList e é enviado para a Thread que será responsável por
         // atualizar suas coordenadas
-        OutroCarro outroCarro = new OutroCarro(this,"azul.png",300,10);
-
-        elementos.add(outroCarro);
-        this.atualizaUmCarroViaThread = new ExemploDeThread(outroCarro, this);
-
     }
 
 
@@ -115,7 +112,8 @@ public class Tela extends JPanel implements ActionListener {
      * @param e
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e)
+    {
 
         // Verifica a situação das teclas (pressionadas, soltas, etc)
         this.teclado.poll();
@@ -132,8 +130,8 @@ public class Tela extends JPanel implements ActionListener {
      * Aqui é feita a atualização das coordenadas de todos os elementos
      * gráficos que estão na área de desenho da Tela
      */
-    public void processarLogica(){
-
+    public void processarLogica()
+    {
         // atualizando as coordenadas manualmente
         elementos.forEach(elemento -> {
 
@@ -154,11 +152,12 @@ public class Tela extends JPanel implements ActionListener {
     /**
      * Limpa a tela e desenha todos elementos novamente já com suas coordenadas atualizadas
      */
-    public void renderizar(){
+    public void renderizar()
+    {
         Graphics2D g2 = (Graphics2D) this.getGraphics();
 
         //Limpando a tela, isto é, desenhando um retângulo preenchido com dimensões iguais a da Tela
-        g2.setColor(Color.gray);
+        g2.setColor(Color.CYAN);
         g2.fillRect(0, 0, getWidth(), getHeight());
 
 
@@ -179,13 +178,36 @@ public class Tela extends JPanel implements ActionListener {
      * mas é possível desenhar imagens, elipse, string, etc.
      *
      */
-    public void renderizarCenario(){
+    public void renderizarCenario()
+    {
         Graphics2D g2 = (Graphics2D) this.getGraphics();
 
         // desenhando retângulos que poderiam ser janelas?
-        g2.setColor(Color.darkGray);
-        g2.fillRect(200,10,40,40);
-        g2.fillRect(200,100,40,40);
+        g2.setColor(Color.GRAY);
+        g2.fillRect(52,0,490,10); // Linha horizontal 1.
+        g2.fillRect(52,110,490,10); // Linha horizontal 2.
+        g2.fillRect(52,220,490,10); // Linha horizontal 3.
+        g2.fillRect(52,330,490,10); // Linha horizontal 4.
+        g2.fillRect(52,440,490,10); // Linha horizontal 5.
+        g2.fillRect(52,550,490,10); // Linha horizontal 6.
+        g2.fillRect(52,660,490,10); // Linha horizontal 7.
+        g2.fillRect(52,0,10,660); // Linha vertical 1.
+        g2.fillRect(52,10,10,660); // Linha vertical 2.
+        g2.fillRect(212,10,10,660); // Linha vertical 3.
+        g2.fillRect(372,10,10,660); // Linha vertical 4.
+        g2.fillRect(532,10,10,660); // Linha vertical 5.
+
+        Graphics2D g3 = (Graphics2D) this.getGraphics();
+
+        g3.setColor(Color.GREEN);
+        g3.fillRect(0,670,653,40); // Grama.
+
+        Graphics2D g4 = (Graphics2D) this.getGraphics();
+
+        g4.setColor(Color.blue);
+        g4.fillRect(0,0,52,670); // Céu lado esquerdo.
+        g4.fillRect(541,0,551,670); // Céu lado direito.
+
 
         g2.dispose();
     }
@@ -194,7 +216,8 @@ public class Tela extends JPanel implements ActionListener {
     /**
      * Fim de jogo/rodada
      */
-    public void pararTimer() {
+    public void pararTimer()
+    {
 
         // Interrompe o timer que atualiza a tela
         this.timer.stop();
@@ -207,13 +230,14 @@ public class Tela extends JPanel implements ActionListener {
         ((ExemploDeThread)this.atualizaUmCarroViaThread).setExecutando(false);
     }
 
-
-    public ArrayList<Elemento> getElementos() {
+    public ArrayList<Elemento> getElementos()
+    {
         return elementos;
     }
 
 
-    public Teclado getTeclado() {
+    public Teclado getTeclado()
+    {
         return teclado;
     }
 
@@ -222,7 +246,8 @@ public class Tela extends JPanel implements ActionListener {
      *
      * @param mensagem mensagem que aparecerá no console
      */
-    public void escreverNoConsole(String mensagem){
+    public void escreverNoConsole(String mensagem)
+    {
         this.console.append(mensagem);
     }
 
@@ -232,14 +257,14 @@ public class Tela extends JPanel implements ActionListener {
      * @param x coordenada X
      * @param y coordenada Y
      */
-    public void clicouSobreElemento(int x, int y){
-
+    public void clicouSobreElemento(int x, int y)
+    {
         // Varrendo lista de elementos para ver se o usuário clicou sobre um elemento. Se sim, então escreva no console
         elementos.forEach(elemento ->{
-            if (elemento.clicouDentro(x,y)){
+            if (elemento.clicouDentro(x,y))
+            {
                 this.escreverNoConsole("Clicou sobre elemento: " + elemento.getClass() + "\n");
             }
-
         });
 
     }
