@@ -5,6 +5,7 @@ import elementos.Elemento;
 import elementos.Semaforo;
 import exemplo.ExemploDeThread;
 import exemplo.OutroCarro;
+import util.LerArquivo;
 import util.Teclado;
 
 import javax.swing.*;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
  */
 public class Tela extends JPanel implements ActionListener {
 
+    private LerArquivo lerArquivo;
     // usado para redesenhar a tela periodicamente
     private Timer timer;
     private int taxaDeAtualizacao;
@@ -48,6 +50,10 @@ public class Tela extends JPanel implements ActionListener {
      * @param console para imprimir as mensagens para o usuário
      */
     public Tela(Teclado teclado, JTextArea console) {
+
+        lerArquivo = new LerArquivo("/home/stefanie/Área de Trabalho/projeto-pratico-02-stefaniemartins/src/main/java/util/arquivo.txt");
+
+
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.gray);

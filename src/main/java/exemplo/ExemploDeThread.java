@@ -1,5 +1,6 @@
 package exemplo;
 
+//import elementos.Andar;
 import elementos.Elemento;
 import gui.Tela;
 
@@ -14,6 +15,7 @@ public class ExemploDeThread extends Thread{
     private Elemento elemento;
     private  boolean  executando;
     private Tela pai;
+    //private Andar andar;
 
     public ExemploDeThread(Elemento elemento, Tela pai){
             this.elemento = elemento;
@@ -27,11 +29,14 @@ public class ExemploDeThread extends Thread{
         pai.escreverNoConsole("Thread iniciada\n");
         this.executando = true;
 
+        //int i = 1;
         // Isso vai repetir até que o usuário mande parar a simulação
         while (executando) {
 
             // Atualize as coordenadas do elemento, que no caso, fará a troca de imagens do OutroCarro
             elemento.atualizar();
+            //andar.filaPorAndar(i);
+            //i++;
 
             try {
 
