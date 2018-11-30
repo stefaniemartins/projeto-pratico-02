@@ -1,9 +1,6 @@
 package gui;
 
-import elementos.Carro;
-import elementos.Elemento;
-import elementos.Elevador;
-import elementos.Semaforo;
+import elementos.*;
 import exemplo.ExemploDeThread;
 import exemplo.OutroCarro;
 import util.LerArquivo;
@@ -14,6 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 /**
@@ -42,6 +40,9 @@ public class Tela extends JPanel implements ActionListener
     // Exemplo de uma Thread. Essa Thread será responsável por atualizar as coordenadas de um elemento específico
     private Thread atualizaUmCarroViaThread;
 
+    private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas;
+    private Andar andar;
+
 
     /**
      * É necessário ver quais teclas foram pressionadas e ter uma referência do componente onde serão escritas
@@ -50,11 +51,17 @@ public class Tela extends JPanel implements ActionListener
      * @param teclado responsável por tratar as teclas pressionadas pelo usuário
      * @param console para imprimir as mensagens para o usuário
      */
-    public Tela(Teclado teclado, JTextArea console) {
-
+    public Tela(Teclado teclado, JTextArea console)
+    {
+        // Ler arquivo.
         lerArquivo = new LerArquivo("/home/stefanie/Área de Trabalho/projeto-pratico-02-stefaniemartins/src/main/java/util/arquivo.txt");
+        vetorPessoas = lerArquivo.getVetorPessoas();
 
-
+        // Criar 6 andares.
+        for (int i = 0; i < 6; i++)
+        {
+            Andar andar = new Andar(null);
+        }
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.gray);
@@ -106,6 +113,41 @@ public class Tela extends JPanel implements ActionListener
         atualizaUmCarroViaThread.start();
     }
 
+    public HashMap<Integer, Integer> filaPessoas(int instante)
+    {
+        ArrayList<Pessoa> listaAuxiliar;
+        HashMap<Integer, Integer> pessoasIntante = new HashMap<>();
+
+        listaAuxiliar = vetorPessoas.get(instante);
+
+        for (int i = 0; i < listaAuxiliar.size(); i++)
+        {
+            Pessoa pessoa = listaAuxiliar.get(i);
+            pessoasIntante.put(pessoa.getOrigem(), pessoa.getDestino());
+        }
+
+        return pessoasIntante;
+    }
+
+    public void pessoasAndar(int instante)
+    {
+        HashMap<Integer, Integer> tabelaAuxiliar;
+
+        tabelaAuxiliar = filaPessoas(instante);
+
+        for (int i = 0; i < 6; i++)
+        {
+            int auxiliar;
+            ArrayList<Integer> listaAuxiliar = new ArrayList<>();
+
+            while (tabelaAuxiliar.containsKey(i))
+            {
+                auxiliar = tabelaAuxiliar.get(i);
+                listaAuxiliar.add(auxiliar);
+                andar.getPessoasAndar().put(i, listaAuxiliar);
+            }
+        }
+    }
 
     /**
      * Este método é invocado a cada taxaDeAtualizacao pelo Timer

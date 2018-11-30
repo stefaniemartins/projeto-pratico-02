@@ -11,12 +11,12 @@ import java.util.HashMap;
 
 public class LerArquivo
 {
-    private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas;
+    private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas1;
     private Andar andar;
 
     public LerArquivo(String nomeArq)
     {
-        vetorPessoas = new HashMap();
+        vetorPessoas1 = new HashMap();
 
         try
         {
@@ -45,14 +45,14 @@ public class LerArquivo
                     Pessoa pessoa = new Pessoa(origem, destino);
 
                     listaPessoas.add(pessoa);
-                    vetorPessoas.put(instante, listaPessoas);
+                    vetorPessoas1.put(instante, listaPessoas);
                 }
 
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
 
-            andar = new Andar(vetorPessoas);
-            andar.filaPorAndar(0);
+//            andar = new Andar(vetorPessoas1);
+//            andar.filaPorAndar(0);
 //            andar.filaPorAndar(1);
 //            andar.filaPorAndar(2);
 //            andar.filaPorAndar(3);
@@ -63,5 +63,10 @@ public class LerArquivo
         {
             System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
         }
+    }
+
+    public HashMap<Integer, ArrayList<Pessoa>> getVetorPessoas()
+    {
+        return vetorPessoas1;
     }
 }
