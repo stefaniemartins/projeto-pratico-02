@@ -1,17 +1,19 @@
 package elementos;
 
+import gui.Tela;
 import util.LerArquivo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Andar
+public class Andar extends Elemento
 {
     private HashMap<Integer, ArrayList<Integer>> pessoasAndar;
 
-    public Andar(HashMap<Integer, ArrayList<Integer>> pessoasAndar)
+    public Andar(Tela pai, String imagemNome, int posX, int posY)
     {
-        this.pessoasAndar = pessoasAndar;
+        super(pai, imagemNome, posX, posY);
+        this.pessoasAndar = new HashMap<>();
     }
 
     public HashMap<Integer, ArrayList<Integer>> getPessoasAndar()
@@ -22,5 +24,11 @@ public class Andar
     public void setPessoasAndar(HashMap<Integer, ArrayList<Integer>> pessoasAndar)
     {
         this.pessoasAndar = pessoasAndar;
+    }
+
+    @Override
+    public void atualizar()
+    {
+
     }
 }

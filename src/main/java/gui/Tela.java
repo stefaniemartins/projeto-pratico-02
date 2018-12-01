@@ -35,14 +35,15 @@ public class Tela extends JPanel implements ActionListener
 
     // Elementos que serão desenhados na tela
     private ArrayList<Elemento> elementos;
-
+    private ArrayList<Elevador> listaElevadores;
+    private ArrayList<Andar> listaAndares;
 
     // Exemplo de uma Thread. Essa Thread será responsável por atualizar as coordenadas de um elemento específico
     private Thread atualizaUmCarroViaThread;
 
     private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas;
-    private Andar andar;
 
+    private Andar andar;
 
     /**
      * É necessário ver quais teclas foram pressionadas e ter uma referência do componente onde serão escritas
@@ -57,23 +58,20 @@ public class Tela extends JPanel implements ActionListener
         lerArquivo = new LerArquivo("/home/stefanie/Área de Trabalho/projeto-pratico-02-stefaniemartins/src/main/java/util/arquivo.txt");
         vetorPessoas = lerArquivo.getVetorPessoas();
 
-        // Criar 6 andares.
-        for (int i = 0; i < 6; i++)
-        {
-            Andar andar = new Andar(null);
-        }
-
         this.setLayout(new BorderLayout());
         this.setBackground(Color.gray);
         this.repaint();
 
         this.elementos = new ArrayList<>();
+        this.listaElevadores = new ArrayList<>();
+        this.listaAndares = new ArrayList<>();
         this.teclado = teclado;
         this.console = console;
 
         this.taxaDeAtualizacao = 120;
 
         // Criando os elementos que serão desenhados na tela
+
         this.criarElementos();
     }
 
@@ -84,12 +82,21 @@ public class Tela extends JPanel implements ActionListener
     public void criarElementos(){
 
         // Limpando o ArrayList
-        elementos.clear();
+        listaAndares.clear();
+        listaElevadores.clear();
 
-        // Adicionando um Carro e um Semáforo
-        elementos.add(new Elevador(this,"open.png",105,595));
-        elementos.add(new Elevador(this,"open.png",265,595));
-        elementos.add(new Elevador(this,"open.png",425,595));
+        // Adicionando andares.
+        listaAndares.add(new Andar(this,"nobody.png",3,596)); // Andar 1.
+        listaAndares.add(new Andar(this,"nobody.png",3,486)); // Andar 2.
+        listaAndares.add(new Andar(this,"nobody.png",3,376)); // Andar 3.
+        listaAndares.add(new Andar(this,"nobody.png",3,266)); // Andar 4.
+        listaAndares.add(new Andar(this,"nobody.png",3,156)); // Andar 5.
+        listaAndares.add(new Andar(this,"nobody.png",3,46));  // Andar 6
+
+        // Adicionando elevadores
+        listaElevadores.add(new Elevador(this,"open.png",123,596)); // Elevador 1.
+        listaElevadores.add(new Elevador(this,"open.png",283,596)); // Elevador 2.
+        listaElevadores.add(new Elevador(this,"open.png",443,596)); // Elevador 3.
 
         // Esse mesmo objeto é adicionado no ArrayList e é enviado para a Thread que será responsável por
         // atualizar suas coordenadas
@@ -110,7 +117,7 @@ public class Tela extends JPanel implements ActionListener
         this.timer.start();
 
         // disparando Thread que ficará atualizando atributos de um elemento específico
-        atualizaUmCarroViaThread.start();
+        //atualizaUmCarroViaThread.start();
     }
 
     public HashMap<Integer, Integer> filaPessoas(int instante)
@@ -161,7 +168,7 @@ public class Tela extends JPanel implements ActionListener
         this.teclado.poll();
 
         // Atualiza as coordenadas dos elementos, respeitando a lógica de cada um
-        this.processarLogica();
+        //this.processarLogica();
 
         // desenha os elementos na tela novamente
         this.renderizar();
@@ -208,7 +215,9 @@ public class Tela extends JPanel implements ActionListener
 
 
         // desenhando os elementos na tela
-        elementos.forEach(elemento -> elemento.desenhar(g2));
+        //elementos.forEach(elemento -> elemento.desenhar(g2));
+        listaElevadores.forEach(elevador -> elevador.desenhar(g2));
+        listaAndares.forEach(andares -> andares.desenhar(g2));
 
         //liberando os contextos gráficos
         g2.dispose();
@@ -226,18 +235,17 @@ public class Tela extends JPanel implements ActionListener
 
         // desenhando retângulos que poderiam ser janelas?
         g2.setColor(Color.GRAY);
-        g2.fillRect(52,0,490,10); // Linha horizontal 1.
-        g2.fillRect(52,110,490,10); // Linha horizontal 2.
-        g2.fillRect(52,220,490,10); // Linha horizontal 3.
-        g2.fillRect(52,330,490,10); // Linha horizontal 4.
-        g2.fillRect(52,440,490,10); // Linha horizontal 5.
-        g2.fillRect(52,550,490,10); // Linha horizontal 6.
-        g2.fillRect(52,660,490,10); // Linha horizontal 7.
-        g2.fillRect(52,0,10,660); // Linha vertical 1.
-        g2.fillRect(52,10,10,660); // Linha vertical 2.
-        g2.fillRect(212,10,10,660); // Linha vertical 3.
-        g2.fillRect(372,10,10,660); // Linha vertical 4.
-        g2.fillRect(532,10,10,660); // Linha vertical 5.
+        g2.fillRect(70,0,508,10);   // Linha horizontal 1.
+        g2.fillRect(70,110,488,10); // Linha horizontal 2.
+        g2.fillRect(70,220,488,10); // Linha horizontal 3.
+        g2.fillRect(70,330,488,10); // Linha horizontal 4.
+        g2.fillRect(70,440,488,10); // Linha horizontal 5.
+        g2.fillRect(70,550,488,10); // Linha horizontal 6.
+        g2.fillRect(70,660,488,10); // Linha horizontal 7.
+        g2.fillRect(70,0,10,660);   // Linha vertical 1.
+        g2.fillRect(230,10,10,660); // Linha vertical 2.
+        g2.fillRect(390,10,10,660); // Linha vertical 3.
+        g2.fillRect(550,10,10,660); // Linha vertical 4.
 
         Graphics2D g3 = (Graphics2D) this.getGraphics();
 
@@ -247,8 +255,8 @@ public class Tela extends JPanel implements ActionListener
         Graphics2D g4 = (Graphics2D) this.getGraphics();
 
         g4.setColor(Color.blue);
-        g4.fillRect(0,0,52,670); // Céu lado esquerdo.
-        g4.fillRect(541,0,551,670); // Céu lado direito.
+        g4.fillRect(0,0,70,670); // Céu lado esquerdo.
+        g4.fillRect(560,0,551,670); // Céu lado direito.
 
 
         g2.dispose();
@@ -269,7 +277,7 @@ public class Tela extends JPanel implements ActionListener
         this.renderizar();
 
         // Interrompe a Thread que estava atualizando as coordenadas do OutroCarro
-        ((ExemploDeThread)this.atualizaUmCarroViaThread).setExecutando(false);
+        //((ExemploDeThread)this.atualizaUmCarroViaThread).setExecutando(false);
     }
 
     public ArrayList<Elemento> getElementos()
