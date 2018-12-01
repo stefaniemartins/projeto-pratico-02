@@ -9,6 +9,8 @@ import java.util.HashMap;
 public class Andar extends Elemento
 {
     private HashMap<Integer, ArrayList<Integer>> pessoasAndar;
+    private String[] figuras = {"azul.png","verde.png"};
+    private int posicao;
 
     public Andar(Tela pai, String imagemNome, int posX, int posY)
     {
@@ -16,9 +18,9 @@ public class Andar extends Elemento
         this.pessoasAndar = new HashMap<>();
     }
 
-    public HashMap<Integer, ArrayList<Integer>> getPessoasAndar()
+    public ArrayList<Integer> getPessoasAndar(int andar)
     {
-        return pessoasAndar;
+        return pessoasAndar.get(andar);
     }
 
     public void setPessoasAndar(HashMap<Integer, ArrayList<Integer>> pessoasAndar)
@@ -29,6 +31,7 @@ public class Andar extends Elemento
     @Override
     public void atualizar()
     {
-
+        posicao = (posicao + 1) % 2;
+        this.icone = this.carregarImagem(figuras[posicao]);
     }
 }

@@ -28,6 +28,10 @@ public class Tela extends JPanel implements ActionListener
     private Timer timer;
     private int taxaDeAtualizacao;
 
+    private Contador C;
+    private int CountTela = 25;
+    private int instante = 1;
+
     // Para capturar as teclas pressionadas pelo usuário
     private Teclado teclado;
     private JTextArea console;
@@ -68,6 +72,7 @@ public class Tela extends JPanel implements ActionListener
         this.teclado = teclado;
         this.console = console;
 
+        this.C = new Contador();
         this.taxaDeAtualizacao = 120;
 
         // Criando os elementos que serão desenhados na tela
@@ -136,26 +141,6 @@ public class Tela extends JPanel implements ActionListener
         return pessoasIntante;
     }
 
-    public void pessoasAndar(int instante)
-    {
-        HashMap<Integer, Integer> tabelaAuxiliar;
-
-        tabelaAuxiliar = filaPessoas(instante);
-
-        for (int i = 0; i < 6; i++)
-        {
-            int auxiliar;
-            ArrayList<Integer> listaAuxiliar = new ArrayList<>();
-
-            while (tabelaAuxiliar.containsKey(i))
-            {
-                auxiliar = tabelaAuxiliar.get(i);
-                listaAuxiliar.add(auxiliar);
-                andar.getPessoasAndar().put(i, listaAuxiliar);
-            }
-        }
-    }
-
     /**
      * Este método é invocado a cada taxaDeAtualizacao pelo Timer
      * @param e
@@ -163,6 +148,19 @@ public class Tela extends JPanel implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e)
     {
+        CountTela--;
+
+        if (CountTela < 0)
+        {
+            C.inc();
+            CountTela = 25;
+        }
+
+        if (C.getValor() == instante)
+        {
+            processarLogica(instante);
+            instante++;
+        }
 
         // Verifica a situação das teclas (pressionadas, soltas, etc)
         this.teclado.poll();
@@ -175,29 +173,28 @@ public class Tela extends JPanel implements ActionListener
     }
 
 
+
     /**
      * Aqui é feita a atualização das coordenadas de todos os elementos
      * gráficos que estão na área de desenho da Tela
      */
-    public void processarLogica()
+    public void processarLogica(int instante)
     {
-        // atualizando as coordenadas manualmente
-        elementos.forEach(elemento -> {
+        HashMap<Integer, Integer> tabelaAuxiliar;
 
-            // A ideia desse exemplo é que o OutroCarro
-            // seja atualizado por uma outra thread e não por aqui.
-            if (!(elemento instanceof OutroCarro)) {
+        tabelaAuxiliar = filaPessoas(instante);
 
-                // Semáforo tem uma lógica de atualização diferente daquela de Carro
-                // Semáforo fica frequentemente trocando suas cores
-                // Carro só atualiza coordenadas se o usuário tive pressionado a tecla SETA para CIMA ou SETA para Baixo
-                // OutroCarro só é atualizado pela Thread "ExemploDeThread"
-                elemento.atualizar();
+        for (int i = 0; i < 6; i++)
+        {
+            int auxiliar;
+
+            while (tabelaAuxiliar.containsKey(i))
+            {
+                auxiliar = tabelaAuxiliar.get(i);
+                andar.getPessoasAndar(i).add(auxiliar);
             }
-        });
+        }
     }
-
-
     /**
      * Limpa a tela e desenha todos elementos novamente já com suas coordenadas atualizadas
      */

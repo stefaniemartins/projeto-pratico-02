@@ -4,10 +4,9 @@ public class Contador
 {
     private int valor = 0;
 
-    public int inc(int valor)
+    public void inc()
     {
         valor = valor + 1;
-        return valor;
     }
 
     public int getValor()
