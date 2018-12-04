@@ -51,11 +51,6 @@ public class LerArquivo
                 linha = lerArq.readLine(); // lê da segunda até a última linha
             }
 
-//            andar = new Andar(vetorPessoas1);
-//            andar.filaPorAndar(0);
-//            andar.filaPorAndar(1);
-//            andar.filaPorAndar(2);
-//            andar.filaPorAndar(3);
             arq.close();
         }
 

@@ -23,7 +23,7 @@ public class Andar extends Elemento
         return pessoasAndar.get(andar);
     }
 
-    public void setPessoasAndar(HashMap<Integer, ArrayList<Integer>> pessoasAndar)
+    public void setPessoasAndar(int andar, ArrayList<Integer> ListaPessoas)
     {
         this.pessoasAndar = pessoasAndar;
     }

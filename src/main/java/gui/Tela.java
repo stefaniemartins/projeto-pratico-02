@@ -1,8 +1,6 @@
 package gui;
 
 import elementos.*;
-import exemplo.ExemploDeThread;
-import exemplo.OutroCarro;
 import util.LerArquivo;
 import util.Teclado;
 
@@ -30,12 +28,11 @@ public class Tela extends JPanel implements ActionListener
 
     private Contador C;
     private int CountTela = 25;
-    private int instante = 1;
+    private int instante = 0;
 
     // Para capturar as teclas pressionadas pelo usuário
     private Teclado teclado;
     private JTextArea console;
-
 
     // Elementos que serão desenhados na tela
     private ArrayList<Elemento> elementos;
@@ -45,7 +42,7 @@ public class Tela extends JPanel implements ActionListener
     // Exemplo de uma Thread. Essa Thread será responsável por atualizar as coordenadas de um elemento específico
     private Thread atualizaUmCarroViaThread;
 
-    private HashMap<Integer, ArrayList<Pessoa>> vetorPessoas;
+    private HashMap<Integer, ArrayList<Pessoa>> tabelaInstantePessoas;
 
     private Andar andar;
 
@@ -59,8 +56,8 @@ public class Tela extends JPanel implements ActionListener
     public Tela(Teclado teclado, JTextArea console)
     {
         // Ler arquivo.
-        lerArquivo = new LerArquivo("/home/stefanie/Área de Trabalho/projeto-pratico-02-stefaniemartins/src/main/java/util/arquivo.txt");
-        vetorPessoas = lerArquivo.getVetorPessoas();
+        lerArquivo = new LerArquivo("/home/stefanie/Área de Trabalho/projeto-pratico-02/src/main/java/util/arquivo.txt");
+        tabelaInstantePessoas = lerArquivo.getVetorPessoas();
 
         this.setLayout(new BorderLayout());
         this.setBackground(Color.gray);
@@ -125,22 +122,6 @@ public class Tela extends JPanel implements ActionListener
         //atualizaUmCarroViaThread.start();
     }
 
-    public HashMap<Integer, Integer> filaPessoas(int instante)
-    {
-        ArrayList<Pessoa> listaAuxiliar;
-        HashMap<Integer, Integer> pessoasIntante = new HashMap<>();
-
-        listaAuxiliar = vetorPessoas.get(instante);
-
-        for (int i = 0; i < listaAuxiliar.size(); i++)
-        {
-            Pessoa pessoa = listaAuxiliar.get(i);
-            pessoasIntante.put(pessoa.getOrigem(), pessoa.getDestino());
-        }
-
-        return pessoasIntante;
-    }
-
     /**
      * Este método é invocado a cada taxaDeAtualizacao pelo Timer
      * @param e
@@ -153,7 +134,7 @@ public class Tela extends JPanel implements ActionListener
         if (CountTela < 0)
         {
             C.inc();
-            CountTela = 25;
+            CountTela = 10;
         }
 
         if (C.getValor() == instante)
@@ -180,20 +161,60 @@ public class Tela extends JPanel implements ActionListener
      */
     public void processarLogica(int instante)
     {
-        HashMap<Integer, Integer> tabelaAuxiliar;
+        HashMap<Integer, ArrayList<Integer>> tabelaPessoas;
+        System.out.println();
 
-        tabelaAuxiliar = filaPessoas(instante);
+        tabelaPessoas = filaPessoas(instante);
+
 
         for (int i = 0; i < 6; i++)
         {
-            int auxiliar;
-
-            while (tabelaAuxiliar.containsKey(i))
+            System.out.println("---"+i);
+            if (tabelaPessoas.containsKey(i))
             {
-                auxiliar = tabelaAuxiliar.get(i);
-                andar.getPessoasAndar(i).add(auxiliar);
+                ArrayList<Integer> listaDestino;
+
+                listaDestino = tabelaPessoas.get(i);
+                ArrayList<Integer> listaAuxiliar = andar.getPessoasAndar(i);
+
+                if (listaAuxiliar != null)
+                {
+                    listaDestino.addAll(andar.getPessoasAndar(i));
+                    andar.setPessoasAndar(i, listaDestino);
+                }
             }
         }
+    }
+
+    public HashMap<Integer, ArrayList<Integer>> filaPessoas(int instante)
+    {
+        ArrayList<Pessoa> listaPessoa;
+        HashMap<Integer, ArrayList<Integer>> tabelaOrigemDestino = new HashMap<>();
+
+        // Retorna uma lista
+        listaPessoa = tabelaInstantePessoas.get(instante);
+
+        if (listaPessoa != null)
+        {
+            for (int i = 0; i < listaPessoa.size(); i++)
+            {
+                Pessoa pessoa = listaPessoa.get(i);
+                ArrayList<Integer> auxiliar = new ArrayList();
+
+                if (tabelaOrigemDestino.containsKey(pessoa.getOrigem()))
+                {
+                    tabelaOrigemDestino.get(pessoa.getOrigem()).add(pessoa.getDestino());
+                }
+
+                else
+                {
+                    auxiliar.add(pessoa.getDestino());
+                    tabelaOrigemDestino.put(pessoa.getOrigem(), auxiliar);
+                }
+            }
+        }
+
+        return tabelaOrigemDestino;
     }
     /**
      * Limpa a tela e desenha todos elementos novamente já com suas coordenadas atualizadas
